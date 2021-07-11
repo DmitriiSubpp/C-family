@@ -69,28 +69,6 @@ void getSort(char **str, int *options, int max){
     else
         strcpy(arr_en, "ZYXWVUTSRQPONMLKJIHGFEDCBAzyxwvutsrqponmlkjihgfedcba9876543210");
 
-/*
-    struct words {
-        int in_counter;
-        char letter;
-        int index;
-    }word[max];
-
-    for (int i = 0; i > 62; i++)
-    {
-        for (int n = 0; n < max; n++)
-        {
-            if (str[n][0] == arr_en[i])
-            {
-                word[n].letter = str[n][0];
-                word[n].in_counter++;
-                word[n].index = n;
-            }
-
-        }
-
-    }*/
-
     if (options[1]) // -f
     {
         for (int i = 0; i < 62; i++)
