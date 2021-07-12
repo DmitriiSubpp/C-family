@@ -32,12 +32,12 @@ Awesome_calc v1.1
 дополнительно производится отчистка массива после каждой проведенной операции
 
  */
+
 void clear_list(char problem[], char end[]) // Функция удаляет из строки пробелы и прочий мусор, приводя строку к виду |операнд|операция|операнд|
 {
-int i=0, c=0; // i - счётчик,  с - хранит символ
+   int i=0, c=0; // i - счётчик,  с - хранит символ
 
-
-while ((c=getchar())!=EOF && c!='\n') {
+   while ((c=getchar())!=EOF && c!='\n') {
         end[0]=c;
         if ((int)end[0]=='e') {break;} // выход из функции clear_list
         if (((int)c<42 || (int)c>57) && (int)c != '^' && (int)c != '%' && (int)c != 'r') continue;
@@ -46,7 +46,7 @@ while ((c=getchar())!=EOF && c!='\n') {
         problem[i]=c;
         i++;
 
-}
+   }
 }
 // возведение числа a в степень b
 int degree(int a, int b)
