@@ -95,8 +95,6 @@ void train(void){ // тренировка сети
                 //printf("epo: %d, output: %f, expected: %d\n", epochs, h1*h1_w + h2*h2_w, cases[c][3]);
 //===========================================================================
         }
-
-
     }
 // вывод весов
     for(int i =0; i < 3; i++)
@@ -142,7 +140,6 @@ int main()
 
     //train();
     predict(boring, rain, friend1);
-
-
-
+    
+    return 0;
 }
