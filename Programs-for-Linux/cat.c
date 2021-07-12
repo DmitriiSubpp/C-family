@@ -47,7 +47,7 @@ char help[] = ("\
   ./cat        Копирует стандартный ввод на стандартный вывод\n\
 ");
 
-char version[] = "user's cat 1.2\nАвтор программы - Dmitrii Oreshkin\n"; 
+char version[] = "user's cat 1.2\nDmitrii Oreshkin\n"; 
 
 int getOptions(char *str, int *options){
 
