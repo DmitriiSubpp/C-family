@@ -13,7 +13,21 @@
 #define FIELD_Y 14
 #define FIELD_X 40
 
-/* баг: при одновременном нажатии стрелок - проигрыш*/
+void cursor_blinking_off()
+{
+  void* handle = GetStdHandle(STD_OUTPUT_HANDLE);
+  CONSOLE_CURSOR_INFO structCursorInfo;
+  GetConsoleCursorInfo(handle,&structCursorInfo);
+  structCursorInfo.bVisible = FALSE;
+  SetConsoleCursorInfo( handle, &structCursorInfo );
+}
+
+void update_console()
+{
+  COORD position = {0,0};  /* update console */
+  HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+  SetConsoleCursorPosition(hConsole, position);
+}
 
 short int up = 0, down = 0, left = 0, right = 0;
 int key = 0, sn_len = 1, apple_flag = 0;
@@ -39,10 +53,10 @@ void game_over()
 
     for (int i = 0; i < 4; i++)
         printf("%s", gm_over[i]);
-    printf("result: %d points and snake lenght: %d\n\n", score, sn_len);
+    printf("\nresult: %d points and snake lenght: %d\n\n", score, sn_len);
 } // end game_over()
 
-void check_cross(body_t *sn_body)
+void check_intersection(body_t *sn_body)
 {
     if (sn_len >= 3)
         for (int i = 1; i < sn_len; i++)
@@ -50,7 +64,7 @@ void check_cross(body_t *sn_body)
             {
                 game_over(); free(sn_body); exit(1);
             } // end if
-} // end check_cross()
+} // end check_intersection()
 
 body_t* add_part(body_t *sn_body) /* add snake part */
 {
@@ -76,6 +90,9 @@ void add_apple(char field[FIELD_Y+2][FIELD_X+4], body_t *sn_body)
 
 void move(char field[FIELD_Y+4][FIELD_X+4], body_t *sn_body)
 {
+    for (int i = 0; i < sn_len; i++) /* clear field */
+      field[sn_body[i].y][sn_body[i].x] = ' ';
+
     if (up && sn_body[0].y > 1)                 /* move up   */
     {
         for (int i = sn_len-1; i > 0; i--)
@@ -107,11 +124,10 @@ void move(char field[FIELD_Y+4][FIELD_X+4], body_t *sn_body)
 
 void print_field(void)
 {
-    /* Начало координат (0,0) в левом нижнем углу, вывод слева направо, сверху вниз*/
     body_t *sn_body = (body_t*)realloc(NULL, sn_len+1 * sizeof(body_t));
     if ( sn_body == NULL)
         perror("print_field, realloc");
-    sn_body[0].x = 20; sn_body[0].y = 4; // start point
+    sn_body[0].x = 20; sn_body[0].y = 4; /* start point */
 
     char field[FIELD_Y+2][FIELD_X+4] =
             {"0----------------------------------------x",
@@ -140,11 +156,8 @@ void print_field(void)
             apple_flag = 1;
         } // end if
 
-        for (int i = 0; i < sn_len; i++) /* clear field */
-            field[sn_body[i].y][sn_body[i].x] = ' ';
-
         move(field, sn_body); /* move snake in given direction */
-        check_cross(sn_body); /* check intersection of the head with the tail */
+        check_intersection(sn_body); /* check intersection of the head with the tail */
 
         if (field[sn_body[0].y][sn_body[0].x] == '@')
         { /* add part of snake if head of the snake eat apple */
@@ -156,7 +169,7 @@ void print_field(void)
         for (int i = 0; i < sn_len; i++) /* add snake on the field */
             field[sn_body[i].y][sn_body[i].x] = '*';
 
-        for (int i = 0; i < FIELD_Y+2; i++) // print field
+        for (int i = 0; i < FIELD_Y+2; i++) /* print field */
         {
           switch (i)
           {
@@ -177,9 +190,7 @@ void print_field(void)
             } // end switch
         } // end for
         clr_delay(delay);
-        COORD position = {0,0};  /* refresh console */
-        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleCursorPosition(hConsole, position);
+        update_console();
     } // end while
 } // end print_field()
 
@@ -212,6 +223,8 @@ void key_handler(void)
 
 int main(int argc, char **argv)
 {
+    cursor_blinking_off();
+
     pthread_t handler;
     pthread_t field;
 
