@@ -19,7 +19,8 @@ typedef struct body {int x; int y;} body_t;       /* snake body */
 vector<body_t> sn_body {{20, 4}};
 
 short int up = 0, down = 0, left = 0, right = 0;  /* snake direction */
-int sn_len = 1;
+int sn_len = 1;                                   /* snake lenght*/
+
 void cursor_blinking_off()
 {
   void* handle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -41,9 +42,7 @@ class Snake
   private:
     //int sn_len = 1;
   public:
-
-    int get_len() { return sn_len; }
-
+    //int get_len() { return sn_len; }
     int check_intersection()
     {
         if (sn_len >= 3)
